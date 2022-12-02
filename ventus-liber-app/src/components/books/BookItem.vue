@@ -35,14 +35,23 @@ export default {
 </script>
 
 <template>
-  <div class="card">
-    <img :src="image" />
+  <div class="card text-white bg-dark" style="width: 18rem">
+    <img class="card-img-top" :src="image" alt="Card image cap" style="height: 8rem;"/>
     <div class="card-body">
-      <h5 class="author-name">{{ authors.toString() }}</h5>
-      <p class="title">{{ book?.volumeInfo.title }}</p>
-      <p class="subtitle">{{ book?.volumeInfo.subtitle }}</p>
+      <p class="card-text">{{ authors.toString() }}</p>
+      <h5 class="card-title">{{ book?.volumeInfo.title }}</h5>
+      <p class="card-text">{{ book?.volumeInfo.subtitle }}</p>
+      <a :href="book?.volumeInfo.infoLink" class="btn btn-primary" rel="noopener" target="_blank">Google Books page</a>
     </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.card {
+  border-color: var(--bs-gray-800);
+  margin: 2rem 0.5rem;
+}
+.card-img-top {
+  object-fit: none;
+}
+</style>

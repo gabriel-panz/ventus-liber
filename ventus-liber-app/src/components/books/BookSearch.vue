@@ -19,7 +19,7 @@ export default {
       this.isLoading = true;
       await this.axios
         .get(
-          `https://www.googleapis.com/books/v1/volumes?q=${this.search}&startIndex=${this.startIndex}&maxResults=4`
+          `https://www.googleapis.com/books/v1/volumes?q=${this.search}&startIndex=${this.startIndex}&maxResults=12`
         )
         .then((response) => (this.result = response.data.items as IBook[]))
         .catch((error) => console.log("error :>> ", error))
@@ -33,14 +33,23 @@ export default {
   <div class="search-area">
     <input type="text" v-model="search" />
     <button @click="listBooks">Search</button>
-    <div>
-      <BookList :bookList="result" />
-    </div>
+  </div>
+  <div class="">
+    <BookList class="book-list" :bookList="result" />
   </div>
 </template>
 
 <style scoped>
-/* .search-area {
-  
-} */
+.search-area {
+  display: flex;
+  margin: auto;
+  justify-content: center;
+}
+.book-list {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+  max-height: 40rem;
+  width: 60rem;
+}
 </style>
