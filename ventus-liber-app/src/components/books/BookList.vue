@@ -15,7 +15,6 @@ export default {
 
 <template>
   <div>
-    <p>a</p>
     <BookItem :book="book" v-for="book in bookList" :key="book.id" />
   </div>
 </template>

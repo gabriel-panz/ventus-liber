@@ -1,7 +1,11 @@
 <script lang="ts">
 import type IBook from "@/Interfaces/IBook";
+import BookList from "./BookList.vue";
 
 export default {
+  components: {
+    BookList,
+  },
   data() {
     return {
       search: "",
@@ -15,14 +19,9 @@ export default {
       this.isLoading = true;
       await this.axios
         .get(
-          `https://www.googleapis.com/books/v1/volumes?q=${this.search}&startIndex=${this.startIndex}`
+          `https://www.googleapis.com/books/v1/volumes?q=${this.search}&startIndex=${this.startIndex}&maxResults=4`
         )
-        .then((response) => {
-          this.result = response.data.items as IBook[];
-          console.log(response.data.items);
-          
-          console.log('this.result :>> ', this.result);
-        })
+        .then((response) => (this.result = response.data.items as IBook[]))
         .catch((error) => console.log("error :>> ", error))
         .then(() => (this.isLoading = false));
     },
@@ -31,11 +30,17 @@ export default {
 </script>
 
 <template>
-  <input type="text" v-model="search" />
-  <button @click="listBooks">Search</button>
-  <div>
-      <BookList :bookList="result"/>
+  <div class="search-area">
+    <input type="text" v-model="search" />
+    <button @click="listBooks">Search</button>
+    <div>
+      <BookList :bookList="result" />
+    </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+/* .search-area {
+  
+} */
+</style>
