@@ -49,7 +49,7 @@ export default {
 <style scoped>
 .card {
   border-color: var(--bs-gray-800);
-  margin: 2rem 0.5rem;
+  margin: 0 0.5rem 2rem 0.5rem;
 }
 .card-img-top {
   object-fit: none;

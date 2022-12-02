@@ -12,4 +12,7 @@
   width: 100%;
   background-color: var(--bs-gray-800);
 }
+.navbar-brand {
+  margin-left: 2rem;
+}
 </style>
