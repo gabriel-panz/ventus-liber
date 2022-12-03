@@ -9,21 +9,37 @@ export default {
   data() {
     return {
       search: "",
-      startIndex: 0,
+      currentIndex: 0,
+      maxResults: 6,
       isLoading: false,
       result: [] as IBook[],
     };
   },
   methods: {
-    async listBooks() {
+    async searchBooks() {
+      this.currentIndex = 0;
+      this.result = [] as IBook[];
+      this.getBooks();
+    },
+    async getBooks() {
       this.isLoading = true;
       await this.axios
         .get(
-          `https://www.googleapis.com/books/v1/volumes?q=${this.search}&startIndex=${this.startIndex}&maxResults=12`
+          `https://www.googleapis.com/books/v1/volumes?q=${this.search}&startIndex=${this.currentIndex}&maxResults=${this.maxResults}`
         )
-        .then((response) => (this.result = response.data.items as IBook[]))
+        .then((response) =>
+          this.result.push(...(response.data.items as IBook[]))
+        )
         .catch((error) => console.log("error :>> ", error))
         .then(() => (this.isLoading = false));
+    },
+    handleScroll() {
+      let element = this.$refs.booksList as Element;
+      let reachedBottom = element.scrollTop + element.clientHeight >= element.scrollHeight;
+      if (reachedBottom && !this.isLoading) {
+        this.currentIndex += this.maxResults;
+        this.getBooks();
+      }
     },
   },
 };
@@ -31,16 +47,28 @@ export default {
 
 <template>
   <div class="search-area">
-    <input class="search-input text-white" type="text" v-model="search" placeholder="Digite o nome de um livro..."/>
-    <button class="btn btn-dark" @click="listBooks">Search</button>
+    <input
+      class="search-input text-white"
+      type="text"
+      v-model="search"
+      placeholder="Digite o nome de um livro..."
+    />
+    <button class="btn btn-dark" @click="searchBooks">Search</button>
   </div>
-  <div class="">
+  <div class="book-list-wrapper" ref="booksList" @scroll="handleScroll">
     <BookList class="book-list" :bookList="result" />
+  </div>
+  <div v-if="isLoading" class="spinner-border green" role="status">
+    <span class="sr-only"></span>
   </div>
 </template>
 
 <style scoped>
-.search-input{
+.spinner-border {
+  margin: 1rem 0 0 45%;
+}
+
+.search-input {
   width: 30rem;
   padding-left: 1rem;
   border-radius: 4px;
@@ -48,21 +76,21 @@ export default {
   background-color: var(--bs-gray-900);
 }
 
-/* .search-button {
-  border: none;
-  background-color: var(--bs-teal);
-} */
 .search-area {
   display: flex;
   margin: auto;
   justify-content: center;
 }
-.book-list {
+
+.book-list-wrapper {
   margin-top: 1rem;
-  display: flex;
-  flex-wrap: wrap;
   overflow-y: scroll;
   max-height: 40rem;
   width: 60rem;
+}
+
+.book-list {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>
