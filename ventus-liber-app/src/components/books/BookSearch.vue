@@ -35,7 +35,8 @@ export default {
     },
     handleScroll() {
       let element = this.$refs.booksList as Element;
-      let reachedBottom = element.scrollTop + element.clientHeight >= element.scrollHeight;
+      let reachedBottom =
+        element.scrollTop + element.clientHeight >= element.scrollHeight;
       if (reachedBottom && !this.isLoading) {
         this.currentIndex += this.maxResults;
         this.getBooks();
@@ -92,5 +93,16 @@ export default {
 .book-list {
   display: flex;
   flex-wrap: wrap;
+}
+
+::-webkit-scrollbar {
+  width: 0.4rem;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--bs-gray-600);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--bs-gray-700);
 }
 </style>
